@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><meta name="referrer" content="no-referrer">
+<title>Usine Clips – Connexion</title><link rel="stylesheet" href="../style.css"></head>
+<body>
+<h1 id="titre">Connexion TikTok</h1>
+<p id="msg">Copie l'adresse ci-dessous et colle-la dans le terminal (6_connexion_tiktok.py).</p>
+<textarea id="url" readonly></textarea>
+<p><button id="copier">Copier l'adresse</button> <span id="ok"></span></p>
+<p class="muted">Cette page n'envoie rien nulle part : le code reste dans ton navigateur jusqu'à ce que tu le colles
+dans le terminal. Il n'est valable que quelques minutes et ne sert qu'une fois.</p>
+<script>
+  const p = new URLSearchParams(location.search), champ = document.getElementById("url");
+  champ.value = location.href;
+  if (p.get("error")) {
+    document.getElementById("titre").textContent = "Autorisation refusée ou impossible";
+    document.getElementById("msg").textContent = (p.get("error_description") || p.get("error")) +
+      " : colle quand même l'adresse dans le terminal pour voir le détail.";
+  } else if (!p.get("code")) {
+    document.getElementById("msg").textContent = "Aucun code dans l'adresse. Relance 6_connexion_tiktok.py.";
+  }
+  document.getElementById("copier").onclick = async () => {
+    try { await navigator.clipboard.writeText(champ.value); }
+    catch { champ.select(); document.execCommand("copy"); }
+    document.getElementById("ok").textContent = "✅ Copié, colle-la dans le terminal (Cmd+V)";
+  };
+</script>
+</body></html>
